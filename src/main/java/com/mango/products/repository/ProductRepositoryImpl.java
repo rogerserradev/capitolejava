@@ -1,10 +1,7 @@
 package com.mango.products.repository;
 
-import com.mango.products.model.ProductResponse;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 public class ProductRepositoryImpl implements ProductRepository {

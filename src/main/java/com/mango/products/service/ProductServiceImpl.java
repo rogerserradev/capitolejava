@@ -6,7 +6,6 @@ import com.mango.products.exception.ProductServiceException;
 import com.mango.products.model.ProductRequest;
 import com.mango.products.model.ProductResponse;
 import com.mango.products.repository.ProductRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import org.slf4j.Logger;
