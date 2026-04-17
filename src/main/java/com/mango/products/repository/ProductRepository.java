@@ -1,7 +1,12 @@
 package com.mango.products.repository;
 
+import com.mango.products.model.ProductResponse;
+
+import java.util.Optional;
+
 public interface ProductRepository {
 
-    int addProduct(String productName, String productDescription);
+    void addProduct(String productName, String productDescription);
+    boolean productAlreadyExists(String productName, String productDescription);
 
 }
