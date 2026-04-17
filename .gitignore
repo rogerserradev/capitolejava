@@ -30,3 +30,6 @@ build/
 # Intellij
 .idea/
 *.iml
+
+# Environment variables
+.env
