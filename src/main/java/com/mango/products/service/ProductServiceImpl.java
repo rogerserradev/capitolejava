@@ -1,6 +1,7 @@
 package com.mango.products.service;
 
 import com.mango.products.converter.ProductConverter;
+import com.mango.products.exception.ProductError;
 import com.mango.products.exception.ProductServiceException;
 import com.mango.products.model.ProductRequest;
 import com.mango.products.model.ProductResponse;
@@ -31,8 +32,8 @@ public class ProductServiceImpl implements ProductService {
 
     private void validateRequest(ProductRequest productRequest) {
         boolean productAlreadyExists = productRepository.productAlreadyExists(productRequest.getName(), productRequest.getDescription());
-        if (productAlreadyExists) {
-            throw new ProductServiceException("Product already exists", "PRODUCT_ALREADY_EXISTS", HttpStatus.CONFLICT);
+        if (productAlreadyExists) { // throw conflict exception
+            throw new ProductServiceException(ProductError.PRODUCT_ALREADY_EXISTS.getMessage(), ProductError.PRODUCT_ALREADY_EXISTS.getCode(), ProductError.PRODUCT_ALREADY_EXISTS.getHttpStatus());
         }
     }
 }
