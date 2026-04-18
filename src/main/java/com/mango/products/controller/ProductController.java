@@ -1,14 +1,13 @@
 package com.mango.products.controller;
 
-import com.mango.products.model.PriceRequest;
-import com.mango.products.model.PriceResponse;
-import com.mango.products.model.ProductRequest;
-import com.mango.products.model.ProductResponse;
+import com.mango.products.model.*;
 import com.mango.products.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/products")
@@ -32,5 +31,13 @@ public class ProductController {
             @Valid @RequestBody PriceRequest priceRequest){
         PriceResponse priceResponse = productService.addPriceToProduct(productId, priceRequest);
         return new ResponseEntity<>(priceResponse, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}/prices")
+    public ResponseEntity<PriceValueResponse> getCurrentPrice(
+            @PathVariable("id") Long productId,
+            @RequestParam("date") LocalDate date) {
+        PriceValueResponse priceValueResponse = productService.getCurrentPrice(productId, date);
+        return new ResponseEntity<>(priceValueResponse, HttpStatus.OK);
     }
 }

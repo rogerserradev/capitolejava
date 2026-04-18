@@ -2,10 +2,7 @@ package com.mango.products.service;
 
 import com.mango.products.exception.ProductError;
 import com.mango.products.exception.ProductServiceException;
-import com.mango.products.model.PriceRequest;
-import com.mango.products.model.PriceResponse;
-import com.mango.products.model.ProductRequest;
-import com.mango.products.model.ProductResponse;
+import com.mango.products.model.*;
 import com.mango.products.repository.PriceRepository;
 import com.mango.products.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
@@ -139,6 +136,32 @@ public class ProductServiceImplTest {
         assertEquals(priceResponse.getInitDate(), priceRequest.getInitDate());
         assertEquals(priceResponse.getEndDate(), priceRequest.getEndDate());
 
+    }
+
+    @Test
+    void shouldThrowPriceNotFoundException(){
+        Long productId = 1L;
+        LocalDate date = LocalDate.now();
+
+        when(priceRepository.getCurrentPrice(productId, date)).thenReturn(Optional.empty());
+        ProductServiceException exception = assertThrows(ProductServiceException.class, () -> productService.getCurrentPrice(productId, date));
+        assertEquals(ProductError.PRICE_NOT_FOUND.getMessage(), exception.getMessage());
+        assertEquals(ProductError.PRICE_NOT_FOUND.getCode(), exception.getErrorCode());
+        assertEquals(ProductError.PRICE_NOT_FOUND.getHttpStatus(), exception.getHttpStatus()); // Conflict
+
+    }
+
+    @Test
+    void shouldGetPrice(){
+        Long productId = 1L;
+        LocalDate date = LocalDate.now();
+        PriceValueResponse expectedPriceResponse = new PriceValueResponse();
+        expectedPriceResponse.setValue(new BigDecimal("12.99"));
+
+        when(priceRepository.getCurrentPrice(productId, date)).thenReturn(Optional.of(expectedPriceResponse));
+        PriceValueResponse actualPriceResponse = productService.getCurrentPrice(productId, date);
+        assertNotNull(actualPriceResponse);
+        assertEquals(expectedPriceResponse.getValue(), actualPriceResponse.getValue());
     }
 
 }

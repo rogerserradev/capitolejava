@@ -3,10 +3,7 @@ package com.mango.products.service;
 import com.mango.products.converter.ProductConverter;
 import com.mango.products.exception.ProductError;
 import com.mango.products.exception.ProductServiceException;
-import com.mango.products.model.PriceRequest;
-import com.mango.products.model.PriceResponse;
-import com.mango.products.model.ProductRequest;
-import com.mango.products.model.ProductResponse;
+import com.mango.products.model.*;
 import com.mango.products.repository.PriceRepository;
 import com.mango.products.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -14,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -42,6 +40,12 @@ public class ProductServiceImpl implements ProductService {
         priceRepository.addPrice(productId, priceRequest.getValue(), priceRequest.getInitDate(), priceRequest.getEndDate());
         logger.info("Price added");
         return ProductConverter.fromRequestToResponse(priceRequest);
+    }
+
+    @Override
+    public PriceValueResponse getCurrentPrice(Long productId, LocalDate date) {
+        return priceRepository.getCurrentPrice(productId, date)
+                .orElseThrow(() -> new ProductServiceException(ProductError.PRICE_NOT_FOUND.getMessage(), ProductError.PRICE_NOT_FOUND.getCode(), ProductError.PRICE_NOT_FOUND.getHttpStatus()));
     }
 
     private void validateProductRequest(ProductRequest productRequest) {

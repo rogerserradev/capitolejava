@@ -28,6 +28,11 @@ public enum ProductError {
             "PRICE_ALREADY_EXISTS",
             "Price already exists between init date and end date",
             HttpStatus.CONFLICT
+    ),
+    PRICE_NOT_FOUND(
+            "PRICE_NOT_FOUND",
+            "Price not found",
+            HttpStatus.NOT_FOUND
     );
 
     private final String code;
