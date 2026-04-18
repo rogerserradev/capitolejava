@@ -8,6 +8,26 @@ public enum ProductError {
             "PRODUCT_ALREADY_EXISTS",
             "Product already exists",
             HttpStatus.CONFLICT
+    ),
+    PRODUCT_NOT_FOUND(
+            "PRODUCT_NOT_FOUND",
+            "Product not found with given id",
+            HttpStatus.NOT_FOUND
+    ),
+    INIT_DATE_IS_NULL(
+            "INIT_DATE_IS_NULL",
+            "Init date can't be null",
+            HttpStatus.BAD_REQUEST
+    ),
+    INVALID_END_DATE(
+            "INVALID_END_DATE",
+            "Invalid end date",
+            HttpStatus.BAD_REQUEST
+    ),
+    PRICE_ALREADY_EXISTS(
+            "PRICE_ALREADY_EXISTS",
+            "Price already exists between init date and end date",
+            HttpStatus.CONFLICT
     );
 
     private final String code;
