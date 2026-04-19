@@ -25,27 +25,47 @@ public class ProductController {
         return new ResponseEntity<>(productResponse, HttpStatus.CREATED);
     }
 
-    @PostMapping("/{id}/prices")
+    @PostMapping("/{productId}/prices")
     public ResponseEntity<PriceResponse> addProduct(
-            @PathVariable("id") Long productId,
+            @PathVariable("productId") Long productId,
             @Valid @RequestBody PriceRequest priceRequest){
         PriceResponse priceResponse = productService.addPriceToProduct(productId, priceRequest);
         return new ResponseEntity<>(priceResponse, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}/prices")
+    @GetMapping("/{productId}/prices")
     public ResponseEntity<PriceValueResponse> getCurrentPrice(
-            @PathVariable("id") Long productId,
+            @PathVariable("productId") Long productId,
             @RequestParam("date") LocalDate date) {
         PriceValueResponse priceValueResponse = productService.getCurrentPrice(productId, date);
         return new ResponseEntity<>(priceValueResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}/prices/history") // Ambiguous mapping if I keep the route /{id}/prices
+    @GetMapping("/{productId}/prices/history") // Ambiguous mapping if I keep the route /{id}/prices
     public ResponseEntity<ProductPriceResponse> getProductPriceHistory(
-            @PathVariable("id") Long productId) {
+            @PathVariable("productId") Long productId) {
         ProductPriceResponse productPriceResponse = productService.getProductPriceHistory(productId);
         return new ResponseEntity<>(productPriceResponse, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{productId}/prices/{priceId}")
+    public ResponseEntity<Void> deletePrice(
+            @PathVariable("productId") Long productId,
+            @PathVariable("priceId") Long priceId) {
+        productService.deletePrice(productId, priceId);
+        return ResponseEntity.noContent().build();
+    }
+
+    // thought about @Patch, but value and initDate can't be null
+    @PutMapping("/{productId}/prices/{priceId}")
+    public ResponseEntity<PriceResponse> updatePrice(
+            @PathVariable("productId") Long productId,
+            @PathVariable("priceId") Long priceId,
+            @Valid @RequestBody PriceRequest priceRequest
+    ) {
+        PriceResponse priceResponse = productService.updatePrice(productId, priceId, priceRequest);
+        return new ResponseEntity<>(priceResponse, HttpStatus.OK);
+    }
+
 
 }

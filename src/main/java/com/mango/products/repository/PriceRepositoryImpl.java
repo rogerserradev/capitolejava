@@ -52,4 +52,16 @@ public class PriceRepositoryImpl implements PriceRepository{
         return jdbcTemplate.query(select, new PriceMapper(), productId);
     }
 
+    @Override
+    public void deletePrice(Long productId, Long priceId) {
+        String delete = "DELETE FROM price WHERE product_id = ? AND id = ?";
+        jdbcTemplate.update(delete, productId, priceId);
+    }
+
+    @Override
+    public void updatePrice(Long productId, Long priceId, BigDecimal value, LocalDate initDate, LocalDate endDate) {
+        String update = "UPDATE price SET value = ?, init_date = ?, end_date = ? WHERE id = ? AND product_id = ?";
+        jdbcTemplate.update(update, value, initDate, endDate, priceId, productId);
+    }
+
 }

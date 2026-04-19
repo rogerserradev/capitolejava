@@ -59,6 +59,18 @@ public class ProductServiceImpl implements ProductService {
         return ProductConverter.fromRequestToResponse(optionalProduct.get(), priceHistoryList);
     }
 
+    @Override
+    public void deletePrice(Long productId, Long priceId) {
+        priceRepository.deletePrice(productId, priceId);
+    }
+
+    @Override
+    public PriceResponse updatePrice(Long productId, Long priceId, PriceRequest priceRequest) {
+        validateDates(priceRequest.getInitDate(), priceRequest.getEndDate());
+        priceRepository.updatePrice(productId, priceId, priceRequest.getValue(), priceRequest.getInitDate(), priceRequest.getEndDate());
+        return ProductConverter.fromRequestToResponse(priceRequest);
+    }
+
     private void validateProductRequest(ProductRequest productRequest) {
         boolean productAlreadyExists = productRepository.productAlreadyExists(productRequest.getName(), productRequest.getDescription());
         if (productAlreadyExists) { // throw conflict exception
@@ -68,12 +80,7 @@ public class ProductServiceImpl implements ProductService {
 
     private void validatePriceRequest(Long productId, PriceRequest priceRequest) {
         // first, we should check dates, because I think we should avoid unnecessary database queries
-        if (priceRequest.getInitDate() == null) {
-            throw new ProductServiceException(ProductError.INIT_DATE_IS_NULL.getMessage(), ProductError.INIT_DATE_IS_NULL.getCode(), ProductError.INIT_DATE_IS_NULL.getHttpStatus());
-        }
-        if (priceRequest.getEndDate() != null && priceRequest.getEndDate().isBefore(priceRequest.getInitDate())){
-            throw new ProductServiceException(ProductError.INVALID_END_DATE.getMessage(), ProductError.INVALID_END_DATE.getCode(), ProductError.INVALID_END_DATE.getHttpStatus());
-        }
+        validateDates(priceRequest.getInitDate(), priceRequest.getEndDate());
         // check if product exists in database, if not, error
         Optional<ProductResponse> optionalProduct = productRepository.findProductById(productId);
         if (optionalProduct.isEmpty()) { // not found exception
@@ -85,5 +92,14 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductServiceException(ProductError.PRICE_ALREADY_EXISTS.getMessage(), ProductError.PRICE_ALREADY_EXISTS.getCode(), ProductError.PRICE_ALREADY_EXISTS.getHttpStatus());
         }
 
+    }
+
+    private void validateDates(LocalDate initDate, LocalDate endDate) {
+        if (initDate == null) {
+            throw new ProductServiceException(ProductError.INIT_DATE_IS_NULL.getMessage(), ProductError.INIT_DATE_IS_NULL.getCode(), ProductError.INIT_DATE_IS_NULL.getHttpStatus());
+        }
+        if (endDate != null && endDate.isBefore(initDate)){
+            throw new ProductServiceException(ProductError.INVALID_END_DATE.getMessage(), ProductError.INVALID_END_DATE.getCode(), ProductError.INVALID_END_DATE.getHttpStatus());
+        }
     }
 }

@@ -196,4 +196,26 @@ public class ProductServiceImplTest {
 
     }
 
+    @Test
+    void shouldDeletePrice(){
+        Long productId = 1L;
+        Long priceId = 1L;
+
+        productService.deletePrice(productId, priceId);
+        verify(priceRepository, times(1)).deletePrice(productId, priceId);
+    }
+
+    @Test
+    void shouldUpdatePrice(){
+        Long productId = 1L;
+        Long priceId = 1L;
+        PriceRequest priceRequest = new PriceRequest();
+        priceRequest.setValue(new BigDecimal("20.99"));
+        priceRequest.setInitDate(LocalDate.of(2020, 1, 1));
+        priceRequest.setEndDate(LocalDate.of(2020, 5, 5));
+
+        productService.updatePrice(productId, priceId, priceRequest);
+        verify(priceRepository, times(1)).updatePrice(productId, priceId, priceRequest.getValue(), priceRequest.getInitDate(), priceRequest.getEndDate());
+    }
+
 }

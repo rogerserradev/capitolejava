@@ -17,4 +17,8 @@ public interface PriceRepository {
     Optional<PriceValueResponse> getCurrentPrice(Long productId, LocalDate date);
 
     List<PriceResponse> getHistoryPricesFromProduct(Long productId);
+
+    void deletePrice(Long productId, Long priceId);
+
+    void updatePrice(Long productId, Long priceId, BigDecimal value, LocalDate initDate, LocalDate endDate);
 }
