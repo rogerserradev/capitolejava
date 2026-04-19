@@ -26,7 +26,7 @@ public class ProductController {
     }
 
     @PostMapping("/{productId}/prices")
-    public ResponseEntity<PriceResponse> addProduct(
+    public ResponseEntity<PriceResponse> addPrice(
             @PathVariable("productId") Long productId,
             @Valid @RequestBody PriceRequest priceRequest){
         PriceResponse priceResponse = productService.addPriceToProduct(productId, priceRequest);
