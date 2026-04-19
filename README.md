@@ -1,5 +1,70 @@
 # 🧪 Prueba Técnica – Sistema de Productos con Precios Históricos
 
+## 🧩 Desarrollo
+
+Esta prueba ha sido elaborada con el siguiente stack tecnológico:
+
+- Java 21
+- Springboot 3.3.5
+- Spring Jdbc (jdbctemplate)
+- Docker
+- Docker Compose
+- Postgresql, imagen postgres:18.3-alpine
+- Gradle
+- OpenAPI
+
+He optado por Jdbctemplate, ya que es más optimo que alternativas como JPA, debido a la flexibilidad que tiene al permitir mejor redacción de queries y no depender de Entities.
+Además, sabía que se utilizaba en la empresa de antemano, ya que lo pregunté en el Filtro Técnico.
+Opté por SQL en lugar de NoSQL debido a que ofrece modelos más consistentes, aunque en casos concretos como el historial de precios, sí que hubiera preferido MongoDB, ya que los datos que se leen juntos, quizá deberían guardarse juntos; en este caso en un documento JSON.
+Añadí scripts para introducir datos de prueba en tablas, ya que facilitó el testing de las funcionalidades.
+
+Sigue una arquitectura típica:
+- Controller
+- Service
+- Repository
+- Separación de clases java contenedoras, en Request y Response, dependiendo de los datos a devolver
+
+Para levantar la aplicación, basta con ejecutar el comando docker compose up --build
+Para hacer una nueva build y aplicar cambios java, ejecutar el comando docker compose down -v
+
+Nota: los datos referentes a base de datos, usuario, contraseña y derivados han sido ubicados en un .env, por lo que subí un .env.interview alternativo
+
+Link a la documentación OpenApi: http://localhost:8080/swagger-ui/index.html
+
+Me he tomado la molestia de adjuntar una colección de Postman con algunas operaciones varias en el directorio postman del proyecto
+
+### 🧩 Especificaciones sobre los requisitos
+
+1. **Crear un producto**
+
+El controlador recibe una petición al endpoint /products y guarda el producto en base de datos.
+
+2. **Agregar un precio a un producto**
+
+El controlador recibe una petición al endpoint /products/{productId}/prices, y el servicio se encarga de validar fechas, comprobar que el producto existe y otras comprobaciones antes de grabar en base de datos.
+
+3. **Obtener el precio vigente de un producto en una fecha**
+
+El controlador recibe una petición al endpoint /products/{productId}/prices, y el servicio se encarga de devolver el precio vigente a una fecha.
+
+4. **Obtener el historial completo de precios de un producto**
+
+En este apartado tuve ambigüedad de url, por lo que tuve que añadir un sufijo, quedando la url así: /products/{productId}/history.
+Este fue quizá el apartado que tuve que meditar más, ya que estaba la opción de hacer una sola query con 1 join, o bien mantener 2 queries, una con el producto y otra con el listado de precios.
+Como ya tenía RowMapper montado y la separación entre product y price estaba muy marcada, opté por montar un nuevo DTO con las 2 queries, ya que también existía la posibilidad de que no hubiera precios para un producto todavía.
+Es un apartado que me gustaría comentar para recibir feedback/mejoras en la revisión de código.
+
+**Extras**
+
+Opté por añadir borrados y actualizaciones de precios, y esto explica por qué ya no uso {id} en las url, ya que apareció el endpoint /{productId}/prices/{priceId}, por lo que por cladidad del código decidí renombrar.
+Como comenté anteriormente, añadí un script SQL para añadir datos de productos y precios, para facilitar las pruebas.
+También añadí documentación OpenApi, a la cual se puede acceder con el link visto anteriormente.
+Toda la lógica de negocio del servicio ha sido testeada con Junit y Mockito.
+Barajé la posibilidad de introducir JWT, y usar la información de localización para la divisa, pero es algo que no he usado a nivel profesional, ya que los tokens siempre los proveía otro departamento y nosotros nos limitábamos a usarlo con Postman.
+Por último, no realicé las pruebas de performance con herramientas como Gatling, ya que no lo consideré algo esencial debido a que comenté previamente que no poseo experiencia en este campo, aunque estaba dispuesto a aprenderlo si el puesto lo requiere.
+En conclusión, todo lo que aparece en el proyecto son las herramientas con las que siempre he trabajado y puedo demostrar experiencia.
+Como último apunte, esta prueba me ha servido para afianzar conocimientos que ya tenía con anterioridad (como docker compose), pero que no había utilizado a nivel profesional, debido a que la orquestación de despliegues se realizaba principalmente con Jenkins.
+
 ## 🧩 Contexto
 
 Tu objetivo es diseñar e implementar una API que permita gestionar productos y sus precios históricos. Cada producto puede tener múltiples precios a lo largo del tiempo, pero solo un precio puede estar vigente para una misma fecha.

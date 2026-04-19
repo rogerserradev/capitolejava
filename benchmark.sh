@@ -71,7 +71,7 @@ echo -e "\n"
 
 # Get full price history
 echo "Getting full price history..."
-curl -X GET "$BASE_URL/products/$PRODUCT_ID/prices"
+curl -X GET "$BASE_URL/products/$PRODUCT_ID/prices/history"
 echo -e "\n"
 
 # Performance testing section
@@ -109,7 +109,7 @@ echo -e "\n"
 echo "Testing concurrent price history requests..."
 START_TIME=$(date +%s.%N)
 for i in {1..15000}; do
-  curl -s -X GET "$BASE_URL/products/$PRODUCT_ID/prices" > /dev/null &
+  curl -s -X GET "$BASE_URL/products/$PRODUCT_ID/prices/history" > /dev/null &
 done
 wait
 END_TIME=$(date +%s.%N)

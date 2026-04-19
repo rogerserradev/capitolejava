@@ -1,4 +1,3 @@
-version: "3.9"
 
 services:
   app:
@@ -10,6 +9,15 @@ services:
       - "8080:8080"
     command: >
       java -cp app.jar com.mango.App
+    depends_on:
+      - db
+    env_file:
+      - .env.interview
+    environment:
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     deploy:
       resources:
         limits:
@@ -35,3 +43,21 @@ services:
         reservations:
           cpus: '0.25'
           memory: 256M
+
+  db:
+    image: postgres:18.3-alpine
+    container_name: products-db
+    env_file:
+      - .env.interview
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker/db:/docker-entrypoint-initdb.d
+
+volumes:
+  pgdata:
