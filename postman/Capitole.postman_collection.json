@@ -1,0 +1,174 @@
+{
+  "info": {
+    "_postman_id": "73161479-9d36-4183-8679-8ec4d132de56",
+    "name": "Capitole",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "36183488"
+  },
+  "item": [
+    {
+      "name": "Add product",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\" : \"Zapatillas deportivas\",\r\n    \"description\" : \"Calzado para ir al gimnasio\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/products",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Price",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"value\": 19.99,\r\n  \"initDate\": \"2026-04-18\",\r\n  \"endDate\": \"2026-12-31\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/products/1/prices",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "products",
+            "1",
+            "prices"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update price",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"value\": 19.99,\r\n  \"initDate\": \"2026-04-18\",\r\n  \"endDate\": \"2026-12-31\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/products/1/prices",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "products",
+            "1",
+            "prices"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get price Given date",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/products/1/prices?date=2026-05-15",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "products",
+            "1",
+            "prices"
+          ],
+          "query": [
+            {
+              "key": "date",
+              "value": "2026-05-15"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get historic prices",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/products/1/prices?date=2026-05-15",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "products",
+            "1",
+            "prices"
+          ],
+          "query": [
+            {
+              "key": "date",
+              "value": "2026-05-15"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete price",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/products/1/prices/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "products",
+            "1",
+            "prices",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
