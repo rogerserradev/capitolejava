@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -162,6 +163,37 @@ public class ProductServiceImplTest {
         PriceValueResponse actualPriceResponse = productService.getCurrentPrice(productId, date);
         assertNotNull(actualPriceResponse);
         assertEquals(expectedPriceResponse.getValue(), actualPriceResponse.getValue());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenProductNotFound(){
+        Long productId = 1L;
+
+        when(productRepository.findProductById(productId)).thenReturn(Optional.empty());
+        ProductServiceException exception = assertThrows(ProductServiceException.class, () -> productService.getProductPriceHistory(productId));
+        assertEquals(ProductError.PRODUCT_NOT_FOUND.getMessage(), exception.getMessage());
+        assertEquals(ProductError.PRODUCT_NOT_FOUND.getCode(), exception.getErrorCode());
+        assertEquals(ProductError.PRODUCT_NOT_FOUND.getHttpStatus(), exception.getHttpStatus()); // Conflict
+
+    }
+
+    @Test
+    void shouldGetProductPrices(){
+        Long productId = 1L;
+        ProductResponse expectedProductResponse = new ProductResponse();
+        expectedProductResponse.setName("Rustic sarouel trousers");
+        expectedProductResponse.setDescription("Mid-waist trousers with a front metal hook and zip closure. Loose-fitting.");
+        PriceResponse expectedPrice = new PriceResponse();
+        expectedPrice.setValue(new BigDecimal("19.99"));
+        expectedPrice.setInitDate(LocalDate.now());
+        List<PriceResponse> expectedPriceList = List.of(expectedPrice);
+        when(productRepository.findProductById(productId)).thenReturn(Optional.of(expectedProductResponse));
+        when(priceRepository.getHistoryPricesFromProduct(productId)).thenReturn(expectedPriceList);
+
+        ProductPriceResponse actualResponse = productService.getProductPriceHistory(productId);
+        assertNotNull(actualResponse);
+        assertEquals(actualResponse.getPrices().size(), expectedPriceList.size());
+
     }
 
 }
