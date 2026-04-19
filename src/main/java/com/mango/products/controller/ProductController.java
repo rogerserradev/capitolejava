@@ -40,4 +40,12 @@ public class ProductController {
         PriceValueResponse priceValueResponse = productService.getCurrentPrice(productId, date);
         return new ResponseEntity<>(priceValueResponse, HttpStatus.OK);
     }
+
+    @GetMapping("/{id}/prices/history") // Ambiguous mapping if I keep the route /{id}/prices
+    public ResponseEntity<ProductPriceResponse> getProductPriceHistory(
+            @PathVariable("id") Long productId) {
+        ProductPriceResponse productPriceResponse = productService.getProductPriceHistory(productId);
+        return new ResponseEntity<>(productPriceResponse, HttpStatus.OK);
+    }
+
 }

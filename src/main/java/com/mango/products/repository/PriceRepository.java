@@ -5,6 +5,7 @@ import com.mango.products.model.PriceValueResponse;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface PriceRepository {
@@ -14,4 +15,6 @@ public interface PriceRepository {
     void addPrice(Long productId, BigDecimal value, LocalDate initDate, LocalDate endDate);
 
     Optional<PriceValueResponse> getCurrentPrice(Long productId, LocalDate date);
+
+    List<PriceResponse> getHistoryPricesFromProduct(Long productId);
 }

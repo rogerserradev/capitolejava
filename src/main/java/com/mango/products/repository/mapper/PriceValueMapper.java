@@ -1,6 +1,5 @@
 package com.mango.products.repository.mapper;
 
-import com.mango.products.model.PriceResponse;
 import com.mango.products.model.PriceValueResponse;
 import org.springframework.jdbc.core.RowMapper;
 

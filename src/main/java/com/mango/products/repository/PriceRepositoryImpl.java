@@ -2,12 +2,15 @@ package com.mango.products.repository;
 
 import com.mango.products.model.PriceResponse;
 import com.mango.products.model.PriceValueResponse;
+import com.mango.products.repository.mapper.PriceMapper;
 import com.mango.products.repository.mapper.PriceValueMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -41,6 +44,12 @@ public class PriceRepositoryImpl implements PriceRepository{
         String select = "SELECT value FROM price WHERE product_id = ? AND init_date <= ? AND (end_date IS NULL OR end_date >= ?)";
         PriceValueResponse priceValueResponse = jdbcTemplate.queryForObject(select, new PriceValueMapper(), productId, date, date);
         return Optional.ofNullable(priceValueResponse);
+    }
+
+    @Override
+    public List<PriceResponse> getHistoryPricesFromProduct(Long productId) {
+        String select = "SELECT value, init_date, end_date FROM price WHERE product_id = ? ORDER BY init_date";
+        return jdbcTemplate.query(select, new PriceMapper(), productId);
     }
 
 }

@@ -11,4 +11,6 @@ public interface ProductService {
     PriceResponse addPriceToProduct(Long productId, PriceRequest priceRequest);
 
     PriceValueResponse getCurrentPrice(Long productId, LocalDate date);
+
+    ProductPriceResponse getProductPriceHistory(Long productId);
 }

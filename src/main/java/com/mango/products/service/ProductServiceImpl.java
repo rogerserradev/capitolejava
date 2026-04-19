@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,6 +47,16 @@ public class ProductServiceImpl implements ProductService {
     public PriceValueResponse getCurrentPrice(Long productId, LocalDate date) {
         return priceRepository.getCurrentPrice(productId, date)
                 .orElseThrow(() -> new ProductServiceException(ProductError.PRICE_NOT_FOUND.getMessage(), ProductError.PRICE_NOT_FOUND.getCode(), ProductError.PRICE_NOT_FOUND.getHttpStatus()));
+    }
+
+    @Override
+    public ProductPriceResponse getProductPriceHistory(Long productId) {
+        Optional<ProductResponse> optionalProduct = productRepository.findProductById(productId);
+        if (optionalProduct.isEmpty()) { // not found exception
+            throw new ProductServiceException(ProductError.PRODUCT_NOT_FOUND.getMessage(), ProductError.PRODUCT_NOT_FOUND.getCode(), ProductError.PRODUCT_NOT_FOUND.getHttpStatus());
+        }
+        List<PriceResponse> priceHistoryList = priceRepository.getHistoryPricesFromProduct(productId);
+        return ProductConverter.fromRequestToResponse(optionalProduct.get(), priceHistoryList);
     }
 
     private void validateProductRequest(ProductRequest productRequest) {

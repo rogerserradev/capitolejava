@@ -1,9 +1,8 @@
 package com.mango.products.converter;
 
-import com.mango.products.model.PriceRequest;
-import com.mango.products.model.PriceResponse;
-import com.mango.products.model.ProductRequest;
-import com.mango.products.model.ProductResponse;
+import com.mango.products.model.*;
+
+import java.util.List;
 
 public class ProductConverter {
 
@@ -24,4 +23,11 @@ public class ProductConverter {
         return priceResponse;
     }
 
+    public static ProductPriceResponse fromRequestToResponse(ProductResponse productResponse, List<PriceResponse> priceHistoryList) {
+        ProductPriceResponse productPriceResponse = new ProductPriceResponse();
+        productPriceResponse.setName(productResponse.getName());
+        productPriceResponse.setDescription(productResponse.getDescription());
+        productPriceResponse.setPrices(priceHistoryList);
+        return productPriceResponse;
+    }
 }
